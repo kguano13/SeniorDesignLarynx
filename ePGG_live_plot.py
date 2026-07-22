@@ -7,7 +7,7 @@ from PyQt5 import QtWidgets, QtCore
 import pyqtgraph as pg
 
 # ---------- Settings ----------
-port = "COM7"
+port = "COM4"
 baud = 1000000
 filename = "Will_pgg_data.csv"
 duration = 60                    # seconds
@@ -43,6 +43,7 @@ sample_count = 0
 start_wall_time = time.time()
 leftover = ""  # holds partial line data between reads
 
+
 def update():
     global sample_count, leftover
 
@@ -50,16 +51,15 @@ def update():
         finish()
         return
 
-    # read everything currently available in the buffer
     waiting = ser.in_waiting
-    print("waiting:", waiting)   # ADD THIS TEMPORARILY
+    print("waiting:", waiting)  # ADD THIS TEMPORARILY
 
     if waiting:
         raw_bytes = ser.read(waiting).decode(errors="ignore")
-        print(repr(raw_bytes))   # ADD THIS TEMPORARILY
+        print(repr(raw_bytes))  # ADD THIS TEMPORARILY
         leftover += raw_bytes
         lines = leftover.split("\n")
-        leftover = lines[-1]  # keep incomplete last line for next time
+        leftover = lines[-1]
         for line in lines[:-1]:
             line = line.strip()
             if not line:
@@ -73,9 +73,10 @@ def update():
                 voltages.append(voltage)
             except ValueError:
                 continue
-                
+
     if times:
         curve.setData(list(times), list(voltages))
+
 
 def finish():
     timer.stop()
@@ -83,9 +84,10 @@ def finish():
     csv_file.close()
     ser.close()
 
+
 timer = QtCore.QTimer()
 timer.timeout.connect(update)
-timer.start(33)  # update ~30 times per second
+timer.start(33)
 
 print("Recording...")
 sys.exit(app.exec_())
