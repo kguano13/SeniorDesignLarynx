@@ -7,7 +7,7 @@ from PyQt5 import QtWidgets, QtCore
 import pyqtgraph as pg
 
 # ---------- Settings ----------
-port = "COM4"
+port = "COM7"
 baud = 1000000
 filename = "Will_pgg_data.csv"
 duration = 60                    # seconds
