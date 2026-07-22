@@ -52,11 +52,9 @@ def update():
         return
 
     waiting = ser.in_waiting
-    print("waiting:", waiting)  # ADD THIS TEMPORARILY
 
     if waiting:
         raw_bytes = ser.read(waiting).decode(errors="ignore")
-        print(repr(raw_bytes))  # ADD THIS TEMPORARILY
         leftover += raw_bytes
         lines = leftover.split("\n")
         leftover = lines[-1]
