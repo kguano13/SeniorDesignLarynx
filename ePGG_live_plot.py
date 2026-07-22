@@ -73,6 +73,14 @@ def update():
 
     if times:
         curve.setData(list(times), list(voltages))
+        
+    if waiting:
+    raw_bytes = ser.read(waiting).decode(errors="ignore")
+    print(repr(raw_bytes))   # ADD THIS TEMPORARILY
+    leftover += raw_bytes
+
+    waiting = ser.in_waiting
+    print("waiting:", waiting)   # ADD THIS TEMPORARILY
 
 def finish():
     timer.stop()
