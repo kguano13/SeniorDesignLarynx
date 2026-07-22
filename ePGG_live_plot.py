@@ -74,6 +74,7 @@ def update():
 
     if times:
         curve.setData(list(times), list(voltages))
+        plot.enableAutoRange(axis='y')  # ADD THIS LINE
 
 
 def finish():
