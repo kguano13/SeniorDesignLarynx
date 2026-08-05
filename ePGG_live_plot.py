@@ -10,7 +10,7 @@ import pyqtgraph as pg
 port = "COM7"
 baud = 1000000
 filename = "Will_pgg_data.csv"
-duration = 60                    # seconds
+duration = 180                   # seconds
 sample_interval_s = 200e-6       # matches Arduino's SAMPLE_INTERVAL
 plot_window_sec = 5              # how many seconds of data to show on screen at once
 
