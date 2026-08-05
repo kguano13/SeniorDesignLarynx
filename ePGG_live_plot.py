@@ -43,16 +43,12 @@ sample_count = 0
 start_wall_time = time.time()
 leftover = ""  # holds partial line data between reads
 
-
 def update():
     global sample_count, leftover
-
     if time.time() - start_wall_time > duration:
         finish()
         return
-
     waiting = ser.in_waiting
-
     if waiting:
         raw_bytes = ser.read(waiting).decode(errors="ignore")
         leftover += raw_bytes
@@ -64,18 +60,22 @@ def update():
                 continue
             try:
                 voltage = float(line)
+
+                # Cap voltage at 3.5 V
+                if voltage > 3.5:
+                    voltage = 3.5
+
                 time_s = sample_count * sample_interval_s
                 writer.writerow([time_s, voltage])
                 sample_count += 1
                 times.append(time_s)
                 voltages.append(voltage)
+
             except ValueError:
                 continue
-
     if times:
         curve.setData(list(times), list(voltages))
-        plot.enableAutoRange(axis='y')  # ADD THIS LINE
-
+        plot.enableAutoRange(axis='y')
 
 def finish():
     timer.stop()
