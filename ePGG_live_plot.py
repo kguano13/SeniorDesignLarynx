@@ -12,7 +12,7 @@ baud = 1000000
 filename = "Will_pgg_data.csv"
 duration = 360                   # seconds
 sample_interval_s = 200e-6       # matches Arduino's SAMPLE_INTERVAL
-plot_window_sec = 5              # how many seconds of data to show on screen at once
+plot_window_sec = 20              # how many seconds of data to show on screen at once
 
 # ---------- Setup serial ----------
 ser = serial.Serial(port, baud, timeout=0)  # timeout=0 = non-blocking reads
@@ -74,7 +74,23 @@ def update():
             except ValueError:
                 continue
     if times:
+        current_time = times[-1]
+        cutoff_time = current_time - plot_window_sec
+
+        while times and times[0] < cutoff_time:
+            times.popleft()
+            voltages.popleft()
+
+        # Update graph
         curve.setData(list(times), list(voltages))
+
+        # Keep x-axis focused on the most recent 20 seconds
+        plot.setXRange(
+            max(0, current_time - plot_window_sec),
+            current_time,
+            padding=0
+        )
+
         plot.enableAutoRange(axis='y')
 
 def finish():
