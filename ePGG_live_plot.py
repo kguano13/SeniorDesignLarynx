@@ -74,21 +74,21 @@ def update():
             except ValueError:
                 continue
     if times:
-    curve.setData(list(times), list(voltages))
+        curve.setData(list(times), list(voltages))
+    
+        current_time = times[-1]
+    
+        # Sliding 20-second x-axis
+        if current_time <= plot_window_sec:
+            plot.setXRange(0, plot_window_sec, padding=0)
+        else:
+            plot.setXRange(
+                current_time - plot_window_sec,
+                current_time,
+                padding=0
+            )
 
-    current_time = times[-1]
-
-    # Sliding 20-second x-axis
-    if current_time <= plot_window_sec:
-        plot.setXRange(0, plot_window_sec, padding=0)
-    else:
-        plot.setXRange(
-            current_time - plot_window_sec,
-            current_time,
-            padding=0
-        )
-
-    plot.enableAutoRange(axis='y')
+        plot.enableAutoRange(axis='y')
 
 def finish():
     timer.stop()
